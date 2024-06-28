@@ -10,16 +10,10 @@ RUN apt-get update && apt-get install -y \
     automake \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /opt/ccminer
-
-# Copiar os arquivos da pasta ccminer para o diretório de trabalho
-COPY . /opt/ccminer
-
-# Configurar permissões de execução para build.sh
-RUN chmod +x /opt/ccminer/build.sh
-
-# Executar o script build.sh
-RUN /bin/bash /opt/ccminer/build.sh
+# Clonar e compilar o ccminer
+RUN git clone https://github.com/tpruvot/ccminer.git /opt/ccminer \
+    && cd /opt/ccminer \
+    && ./build.sh
 
 # Definir o ponto de entrada para o ccminer
 ENTRYPOINT ["/opt/ccminer/ccminer"]
